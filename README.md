@@ -1,60 +1,41 @@
-# AngularSpotify
-aplicación en Angular que consuma datos de Spotify y muestre  información de artistas, álbumes y canciones de manera interactiva.
+# 🎵 AngularSpotify
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+**AngularSpotify** es una aplicación web construida con **Angular** que se conecta a la API de Spotify utilizando el flujo de autorización **Authorization Code con PKCE**. Permite a los usuarios iniciar sesión con su cuenta de Spotify y explorar de manera interactiva sus artistas, álbumes y canciones favoritos, así como ver sus propias playlists.
 
-## Development server
+## 🚀 Funcionalidades
 
-To start a local development server, run:
+- ✅ Login con Spotify (Authorization Code Flow con PKCE)
+- 🎧 Visualización de playlists del usuario
+- 🔍 Búsqueda de artistas por nombre
+- 💽 Navegación entre artistas → álbumes → canciones
+- 🧭 Navegación mediante breadcrumbs (migas de pan) para volver a artistas o álbumes anteriores
 
-```bash
-ng serve
-```
+## 📦 Instalación
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clona este repositorio:
 
-## Code scaffolding
+   ```bash
+   git clone https://github.com/Carloobando96/AngularSpotify.git
+   cd AngularSpotify
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+   ```
 
-```bash
-ng generate component component-name
-```
+2. Instala las dependencias:
+   npm install
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+3. Abre una consola y usa el comando:
+   npm run dev
 
-```bash
-ng generate --help
-```
+🧑‍💻 ¿Cómo usarlo?
+Iniciar sesión con Spotify: Haz clic en el botón de login, que redirige a Spotify para autorizar el acceso.
 
-## Building
+Ver tus playlists: Una vez autenticado, se mostrará una lista con tus playlists personales.
 
-To build the project run:
+Buscar artistas: Utiliza la barra de búsqueda para escribir el nombre de un artista. Presiona el botón de "Buscar" o la tecla Enter.
 
-```bash
-ng build
-```
+Explorar álbumes y canciones: Al seleccionar un artista, podrás ver sus álbumes, y al hacer clic en un álbum, se mostrarán las canciones.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Navegar hacia atrás: Usa el menú de breadcrumbs para volver fácilmente a la vista de álbumes o artistas.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+🤝 Autor
+Desarrollado por Carlos Felipe Obando Santacruz
