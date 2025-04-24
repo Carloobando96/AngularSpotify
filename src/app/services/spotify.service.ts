@@ -10,10 +10,10 @@ export class SpotifyService {
    * Client ID de la aplicación registrada en Spotify Developer Dashboard.
    * @private
    */
-  private clientId = '40dc119251ed46739f3e1704378c76dd'; // ⚠️ Reemplazar por un ID seguro en producción
+  private clientId = '40dc119251ed46739f3e1704378c76dd';
 
   /**
-   * Client Secret de la aplicación registrada. ⚠️ No se debe exponer en producción.
+   * Client Secret de la aplicación registrada.
    * @private
    */
   private clientSecret = 'ff3491bdc9394e418822114313441379';
@@ -59,18 +59,9 @@ export class SpotifyService {
    * @returns Observable con los datos de los artistas encontrados.
    */
   searchArtistByName(artistName: string): Observable<any> {
-    return this.getToken().pipe(
-      switchMap((token) => {
-        const headers = new HttpHeaders({
-          Authorization: `${token.token_type + ' ' + token.access_token}`,
-        });
+    const params = new HttpParams().set('q', artistName).set('type', 'artist');
 
-        const params = new HttpParams()
-          .set('q', artistName)
-          .set('type', 'artist');
-
-        return this.http.get(`${this.apiUrl}/search`, { headers, params });
-      }),
+    return this.http.get(`${this.apiUrl}/search`, { params }).pipe(
       catchError((error) => {
         console.error(
           'Error en el servicio Spotify (searchArtistByName):',
@@ -89,27 +80,21 @@ export class SpotifyService {
    * @returns Observable con la lista de álbumes del artista.
    */
   getAlbumsByArtistId(artistId: string): Observable<any> {
-    return this.getToken().pipe(
-      switchMap((token) => {
-        const headers = new HttpHeaders({
-          Authorization: `${token.token_type + ' ' + token.access_token}`,
-        });
+    const params = new HttpParams().set('include_groups', 'album,single');
 
-        const params = new HttpParams().set('include_groups', 'album,single');
-
-        return this.http.get(`${this.apiUrl}/artists/${artistId}/albums`, {
-          headers,
-          params,
-        });
-      }),
-      catchError((error) => {
-        console.error(
-          'Error en el servicio Spotify (getAlbumsByArtistId):',
-          error
-        );
-        return throwError(() => error);
+    return this.http
+      .get(`${this.apiUrl}/artists/${artistId}/albums`, {
+        params,
       })
-    );
+      .pipe(
+        catchError((error) => {
+          console.error(
+            'Error en el servicio Spotify (getAlbumsByArtistId):',
+            error
+          );
+          return throwError(() => error);
+        })
+      );
   }
 
   /**
@@ -119,19 +104,36 @@ export class SpotifyService {
    * @returns Observable con la lista de canciones del álbum.
    */
   getTracksByAlbumId(albumId: string): Observable<any> {
-    return this.getToken().pipe(
-      switchMap((token) => {
-        const headers = new HttpHeaders({
-          Authorization: `${token.token_type + ' ' + token.access_token}`,
-        });
-
-        return this.http.get(`${this.apiUrl}/albums/${albumId}/tracks`, {
-          headers,
-        });
-      }),
+    return this.http.get(`${this.apiUrl}/albums/${albumId}/tracks`, {}).pipe(
       catchError((error) => {
         console.error(
           'Error en el servicio Spotify (getTracksByAlbumId):',
+          error
+        );
+        return throwError(() => error);
+      })
+    );
+  }
+  /**
+   * Ontiene las playlist de acuerdo al inicio del usuario
+   * @returns Observable con la lista de playlist
+   */
+  getUserPlaylists(): Observable<any> {
+    const token =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('spotify_token')
+        : null;
+
+    if (!token) return throwError(() => new Error('No token found'));
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.apiUrl}/me/playlists`, { headers }).pipe(
+      catchError((error) => {
+        console.error(
+          'Error en el servicio Spotify (getUserPlaylists):',
           error
         );
         return throwError(() => error);

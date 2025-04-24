@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SpotifyService } from '../services/spotify.service';
-import { AuthService } from '../guards/auth.guard';
+
+import { AuthServicSpotify } from '../services/spotify-auth.service';
 
 @Component({
   selector: 'app-spotify-login',
@@ -12,16 +13,14 @@ import { AuthService } from '../guards/auth.guard';
 export class SpotifyLoginComponent {
   constructor(
     private spotifyService: SpotifyService,
-    private router: Router,
-    private authService: AuthService
+    private authServiceSpotify: AuthServicSpotify
   ) {}
 
   loginWithSpotify() {
     this.spotifyService.getToken().subscribe({
       next: (response) => {
         console.log('Token:', response);
-        this.authService.setLogin(true);
-        this.router.navigate(['/main']);
+        this.authServiceSpotify.loginWithSpotify();
       },
       error: (error) => {
         console.error('Error getting token:', error);

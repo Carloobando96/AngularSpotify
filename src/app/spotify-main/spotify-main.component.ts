@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../services/spotify.service';
-import { AuthService } from '../guards/auth.guard';
+
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './spotify-main.component.html',
   styleUrl: './spotify-main.component.scss',
 })
-export class SpotifyMainComponent {
+export class SpotifyMainComponent implements OnInit {
   /**
    * Cadena ingresada por el usuario para buscar artistas.
    */
@@ -54,12 +54,19 @@ export class SpotifyMainComponent {
    * Inyecta el servicio de Spotify para consumir su API.
    * @param spotifyService Servicio para interactuar con Spotify
    */
-  constructor(
-    private spotifyService: SpotifyService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private spotifyService: SpotifyService, private router: Router) {}
 
+  ngOnInit(): void {
+    console.log('el token', localStorage.getItem('spotify_token'));
+    this.spotifyService.getUserPlaylists().subscribe({
+      next: (playlist) => {
+        console.log('las plays', playlist);
+      },
+      error: (error) => {
+        console.error('Error al obtener las playlist:', error);
+      },
+    });
+  }
   /**
    * Realiza la búsqueda de artistas en Spotify utilizando la consulta ingresada.
    * Si la búsqueda está vacía, no realiza la solicitud.
@@ -144,10 +151,12 @@ export class SpotifyMainComponent {
   }
 
   /**
-   * Metodo de salida
+   * Metodo de salida o logout que remueve el token de usuario
    */
   logOut() {
-    this.authService.setLogin(false);
+    localStorage.removeItem('spotify_token');
+    localStorage.removeItem('code_verifier');
+    localStorage.removeItem('spotify_user');
     this.router.navigate(['/login']);
   }
 }
