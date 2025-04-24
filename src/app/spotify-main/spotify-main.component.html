@@ -1,0 +1,138 @@
+<div id="navbar">
+  <img src="../../assets/logo.png" alt="" width="100px">
+  <input [(ngModel)]="searchQuery" type="text" placeholder="Buscar artista.." class="form-control search"
+    (keydown.enter)="searchArtist()">
+  <button (click)="searchArtist()" class="btn signup">
+    Buscar
+  </button>
+  <div class="controls-head">
+    <span class="btn login btn-light rounded-4" (click)="logOut()">Salir</span>
+  </div>
+</div>
+
+<div class="main">
+  <div *ngIf="userPlaylists.length > 0">
+    <h1><b>Mis listas de reproducción</b></h1>
+    <div class="songs">
+      <div class="card" *ngFor="let playlist of userPlaylists">
+        <img class="card-img-top" [src]="playlist.images[0]?.url || './assets/play.png'" alt="Card image"
+          style="height: 220px;">
+        <div class="card-body">
+          <h5 class="card-title">{{playlist.name}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if(searchLabel){
+
+  <div class="category">
+    <!-- Breadcrumb -->
+    <nav class="flex mt-5" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <li class="inline-flex items-center">
+          <span (click)="resetArtist()"
+            class="cursor-pointer inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+            <h2><b>Artistas</b></h2>
+          </span>
+        </li>
+        @if(artistSelect)
+        {
+        <li>
+          <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+              fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 9 4-4-4-4" />
+            </svg>
+            <span (click)="resetAlbum()"
+              class="cursor-pointer ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">
+              <h2><b>{{artistSelect}}</b></h2>
+            </span>
+          </div>
+        </li>
+        }
+        @if(albumSelect)
+        {
+        <li aria-current="page">
+          <div class="flex items-center">
+            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+              fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 9 4-4-4-4" />
+            </svg>
+            <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+              <h2><b>{{albumSelect}}</b></h2>
+            </span>
+          </div>
+        </li>
+        }
+
+      </ol>
+    </nav>
+    <!-- Breadcrumb fin -->
+    @if(!artistSelect){
+    <div class="songs">
+      <div class="card" *ngFor="let artist of artistList">
+        <img class="card-img-top" [src]="artist.images[0]?.url || './assets/play.png'" alt="Card image"
+          style="height: 220px;">
+        <img class="controls" src="./assets/play.png" (click)="searchAlbum(artist)" style="width: 45px;">
+        <div class="card-body">
+          <h5 class="card-title">{{artist.name}}</h5>
+          <p class="card-text" style="font-size: 14px;">
+            <i class="fas fa-users" style="margin-right: 5px;"></i>
+            <span>Seguidores: </span>
+            {{ artist.followers?.total | number }}
+          </p>
+          <p class="card-text" style="font-size: 12px;">
+            {{ artist.genres?.join(' • ') }}
+          </p>
+        </div>
+      </div>
+    </div>
+    }
+    @if(!albumSelect)
+    {
+    <div class="songs">
+      <div class="card" *ngFor="let album of albumList">
+        <img class="card-img-top" [src]="album.images[0]?.url || './assets/play.png'" alt="Card image"
+          style="height: 220px;">
+        <img class="controls" src="./assets/play.png" (click)="searchTrack(album)" style="width: 45px;">
+        <div class="card-body">
+          <h5 class="card-title">{{album.name}}</h5>
+          <p class="card-text" style="font-size: 14px;">
+            <i class="fas fa-calendar" style="margin-right: 5px;"></i>
+            <span>Fecha lanzamiento: </span>
+            {{ album.release_date }}
+          </p>
+        </div>
+      </div>
+    </div>
+    }
+    <div class="songs-list">
+      <div class="song-item" *ngFor="let track of trackList">
+        <div class="song-left">
+          <img [src]="albumImage || './assets/play.png'" alt="Album Cover" class="album-cover">
+        </div>
+        <div class="song-info">
+          <h5 class="card-title">{{track.name}}</h5>
+          <p class="card-text" style="font-size: 14px;">
+            <i class="fas fa-clock" style="margin-right: 5px;"></i>
+            <span>Duracion: </span>
+            {{ formatDuration(track.duration_ms)}}
+            <span>▶️</span>
+            <a [href]="track.external_urls.spotify" target="_blank">Preview</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+  @else{
+  <div class="category">
+    <div class="d-flex">
+      <h1><b>Busca tu artista favorito!</b></h1>
+    </div>
+  </div>
+  }
+</div>
