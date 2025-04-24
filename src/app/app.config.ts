@@ -27,6 +27,11 @@ export function SpotifyAuthInterceptor(
   if (!req.url.includes('api.spotify.com')) {
     return next(req);
   }
+  if (req.headers.has('Token-User')) {
+    const cleanHeaders = req.headers.delete('Token-User');
+    const cleanReq = req.clone({ headers: cleanHeaders });
+    return next(cleanReq);
+  }
 
   return inject(SpotifyService)
     .getToken()

@@ -31,6 +31,11 @@ export class SpotifyMainComponent implements OnInit {
   trackList: any[] = [];
 
   /**
+   * Lista de playlist del usuario.
+   */
+  userPlaylists: any[] = [];
+
+  /**
    * Indicador para mostrar los resultados de la búsqueda.
    */
   searchLabel = false;
@@ -60,6 +65,7 @@ export class SpotifyMainComponent implements OnInit {
     console.log('el token', localStorage.getItem('spotify_token'));
     this.spotifyService.getUserPlaylists().subscribe({
       next: (playlist) => {
+        this.userPlaylists = playlist.items;
         console.log('las plays', playlist);
       },
       error: (error) => {

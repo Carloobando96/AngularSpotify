@@ -128,6 +128,7 @@ export class SpotifyService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
+      'Token-User': 'true',
     });
 
     return this.http.get(`${this.apiUrl}/me/playlists`, { headers }).pipe(
