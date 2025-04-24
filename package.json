@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:AngularSpotify": "node dist/angular-spotify/server/server.mjs",
-    "dev": "ng serve --host 127.0.0.1"
+    "dev": "ng serve --host 127.0.0.1 -o"
   },
   "private": true,
   "dependencies": {
